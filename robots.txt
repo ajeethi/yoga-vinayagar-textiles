@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /pages/account.html
+Disallow: /pages/checkout.html
+Disallow: /pages/cart.html
+
+# Sitemaps
+Sitemap: https://yogavinayagartextiles.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
