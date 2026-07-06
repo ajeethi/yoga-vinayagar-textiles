@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Account | Yoga Vinayagar Textiles</title>
+<meta name="description" content="Manage your Yoga Vinayagar Textiles account. View orders, track deliveries, manage wishlist, and update your profile."/>
+<link rel="canonical" href="https://yogavinayagartextiles.com/pages/account.html"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../css/design-system.css"/>
+<link rel="stylesheet" href="../css/components.css"/>
+</head>
+<body>
+<div class="announcement-bar"><div class="announcement-bar__track"><span class="announcement-bar__item"><span class="announcement-bar__dot"></span>Free Shipping Above ₹999 — Pan India</span><span class="announcement-bar__item"><span class="announcement-bar__dot"></span>WhatsApp: 89396 05447 for Help</span><span class="announcement-bar__item"><span class="announcement-bar__dot"></span>Free Shipping Above ₹999 — Pan India</span><span class="announcement-bar__item"><span class="announcement-bar__dot"></span>WhatsApp: 89396 05447 for Help</span></div></div>
+<header><nav class="navbar" id="navbar"><div class="container"><div class="navbar__inner"><a href="../index.html" class="navbar__logo"><span class="navbar__logo-primary">Yoga Vinayagar</span><span class="navbar__logo-secondary">Cotton Sarees World · Madurai</span></a><div style="flex:1;"></div><div class="navbar__actions"><a href="collections.html" class="btn btn-outline-maroon btn-sm">🛍 Shop Now</a><a href="tel:+918939605447" class="navbar__cta">📞 Call Us</a><button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button></div></div></div></nav></header>
+<div class="mobile-menu-overlay" id="mobileOverlay" aria-hidden="true"></div>
+<aside class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Navigation"><div class="mobile-menu__header"><div><div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--clr-ivory-100);">Yoga Vinayagar</div></div><button id="closeMobile" aria-label="Close menu" style="color:var(--clr-gold-400);background:none;border:none;cursor:pointer;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><nav class="mobile-menu__nav"><a href="../index.html" class="mobile-nav-link">🏠 Home</a><a href="collections.html" class="mobile-nav-link">👗 Collections</a><a href="orders.html" class="mobile-nav-link">📦 My Orders</a><a href="track-order.html" class="mobile-nav-link">🔍 Track Order</a><a href="contact.html" class="mobile-nav-link">📍 Contact</a></nav></aside>
+
+<main>
+<section style="background:var(--gradient-maroon);padding:3.5rem 0 2.5rem;text-align:center;">
+  <div class="container">
+    <div style="width:5rem;height:5rem;border-radius:50%;background:rgba(212,175,55,.15);border:2px solid rgba(212,175,55,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--clr-gold-300)" stroke-width="1.5" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <h1 style="font-family:var(--font-display);font-size:clamp(1.75rem,4vw,2.5rem);color:var(--clr-ivory-100);margin-bottom:.5rem;">My Account</h1>
+    <p style="color:rgba(253,248,240,.7);">Manage orders, track deliveries, and update your preferences.</p>
+  </div>
+</section>
+
+<section class="section-pad">
+<div class="container" style="max-width:900px;">
+  <div style="display:grid;grid-template-columns:240px 1fr;gap:2rem;align-items:flex-start;">
+
+    <!-- Sidebar -->
+    <nav style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.25rem;position:sticky;top:90px;" aria-label="Account navigation">
+      <div style="text-align:center;padding-bottom:1.25rem;border-bottom:1px solid var(--clr-ivory-300);margin-bottom:1.25rem;">
+        <div style="width:4rem;height:4rem;border-radius:50%;background:var(--gradient-maroon);display:flex;align-items:center;justify-content:center;margin:0 auto .75rem;font-size:1.5rem;color:var(--clr-gold-300);" aria-hidden="true">👤</div>
+        <div style="font-family:var(--font-heading);font-weight:600;color:var(--clr-maroon-800);">Guest User</div>
+        <div style="font-size:var(--fs-xs);color:var(--clr-charcoal-400);">Not signed in</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.25rem;">
+        <a href="#orders" class="mobile-nav-link" style="background:var(--clr-maroon-50);color:var(--clr-maroon-800);border-radius:var(--radius-md);">📦 My Orders</a>
+        <a href="track-order.html" class="mobile-nav-link" style="border-radius:var(--radius-md);">🔍 Track Order</a>
+        <a href="wishlist.html" class="mobile-nav-link" style="border-radius:var(--radius-md);">❤️ My Wishlist</a>
+        <a href="#addresses" class="mobile-nav-link" style="border-radius:var(--radius-md);">📍 Saved Addresses</a>
+        <a href="#profile" class="mobile-nav-link" style="border-radius:var(--radius-md);">✏️ Profile Settings</a>
+        <a href="contact.html" class="mobile-nav-link" style="border-radius:var(--radius-md);">💬 Support</a>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+
+      <!-- Quick Actions -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <a href="track-order.html" style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.5rem;text-decoration:none;display:flex;align-items:center;gap:1rem;transition:all var(--transition-fast);" onmouseenter="this.style.boxShadow='var(--shadow-md)';this.style.borderColor='var(--clr-gold-300)'" onmouseleave="this.style.boxShadow='';this.style.borderColor='var(--clr-ivory-300)'">
+          <div style="width:3rem;height:3rem;border-radius:50%;background:var(--clr-gold-50);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;" aria-hidden="true">🔍</div>
+          <div><div style="font-family:var(--font-heading);font-weight:600;color:var(--clr-charcoal-800);">Track Order</div><div style="font-size:var(--fs-xs);color:var(--clr-charcoal-400);">Check delivery status</div></div>
+        </a>
+        <a href="https://wa.me/918939605447?text=Hi%2C+I+need+help+with+my+order" target="_blank" rel="noopener" style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.5rem;text-decoration:none;display:flex;align-items:center;gap:1rem;transition:all var(--transition-fast);" onmouseenter="this.style.boxShadow='var(--shadow-md)';this.style.borderColor='var(--clr-gold-300)'" onmouseleave="this.style.boxShadow='';this.style.borderColor='var(--clr-ivory-300)'">
+          <div style="width:3rem;height:3rem;border-radius:50%;background:#e8f8f3;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;" aria-hidden="true">💬</div>
+          <div><div style="font-family:var(--font-heading);font-weight:600;color:var(--clr-charcoal-800);">WhatsApp Support</div><div style="font-size:var(--fs-xs);color:var(--clr-charcoal-400);">Get instant help</div></div>
+        </a>
+        <a href="collections.html" style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.5rem;text-decoration:none;display:flex;align-items:center;gap:1rem;transition:all var(--transition-fast);" onmouseenter="this.style.boxShadow='var(--shadow-md)';this.style.borderColor='var(--clr-gold-300)'" onmouseleave="this.style.boxShadow='';this.style.borderColor='var(--clr-ivory-300)'">
+          <div style="width:3rem;height:3rem;border-radius:50%;background:var(--clr-maroon-50);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;" aria-hidden="true">👗</div>
+          <div><div style="font-family:var(--font-heading);font-weight:600;color:var(--clr-charcoal-800);">Browse Sarees</div><div style="font-size:var(--fs-xs);color:var(--clr-charcoal-400);">1000+ designs</div></div>
+        </a>
+        <a href="wholesale.html" style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.5rem;text-decoration:none;display:flex;align-items:center;gap:1rem;transition:all var(--transition-fast);" onmouseenter="this.style.boxShadow='var(--shadow-md)';this.style.borderColor='var(--clr-gold-300)'" onmouseleave="this.style.boxShadow='';this.style.borderColor='var(--clr-ivory-300)'">
+          <div style="width:3rem;height:3rem;border-radius:50%;background:var(--clr-ivory-200);display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;" aria-hidden="true">📦</div>
+          <div><div style="font-family:var(--font-heading);font-weight:600;color:var(--clr-charcoal-800);">Wholesale</div><div style="font-size:var(--fs-xs);color:var(--clr-charcoal-400);">Bulk order enquiry</div></div>
+        </a>
+      </div>
+
+      <!-- Orders Section -->
+      <div id="orders" style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.75rem;">
+        <h2 style="font-family:var(--font-heading);font-size:var(--fs-xl);font-weight:600;color:var(--clr-maroon-800);margin-bottom:1.5rem;">Recent Orders</h2>
+        <div style="text-align:center;padding:2.5rem 1rem;color:var(--clr-charcoal-400);">
+          <div style="font-size:3rem;margin-bottom:1rem;" aria-hidden="true">📦</div>
+          <p style="font-size:var(--fs-sm);margin-bottom:1.25rem;">No orders yet. Start shopping to see your orders here!</p>
+          <a href="collections.html" class="btn btn-maroon">Browse Collections →</a>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div style="background:var(--clr-gold-50);border:1px solid var(--clr-gold-200);border-radius:var(--radius-xl);padding:1.5rem;">
+        <p style="font-family:var(--font-heading);font-size:var(--fs-base);font-weight:600;color:var(--clr-maroon-800);margin-bottom:.75rem;">Need Help with an Order?</p>
+        <p style="font-size:var(--fs-sm);color:var(--clr-charcoal-600);margin-bottom:1rem;">Our team is available Mon–Sat 9AM–9PM. For orders placed via WhatsApp, contact us directly at the number you ordered from.</p>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+          <a href="tel:+918939605447" class="btn btn-maroon btn-sm">📞 89396 05447</a>
+          <a href="tel:+919677605447" class="btn btn-outline-maroon btn-sm">📞 96776 05447</a>
+          <a href="https://wa.me/918939605447" class="btn btn-gold btn-sm" target="_blank" rel="noopener">💬 WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+</main>
+
+<footer style="background:var(--clr-maroon-950);padding:2rem 0;"><div class="container" style="text-align:center;"><div style="font-family:var(--font-display);font-size:1.25rem;color:var(--clr-ivory-100);margin-bottom:.25rem;">Yoga Vinayagar Textiles</div><div style="font-size:var(--fs-xs);color:rgba(253,248,240,.5);">Shop No.2-19, New SMR Complex, Muthupatti Main Road, Madurai · © 2025</div></div></footer>
+<a href="https://wa.me/918939605447" class="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+<a href="tel:+918939605447" class="call-fab" aria-label="Call us"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg></button>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+<script src="../js/main.js" defer></script>
+</body>
+</html>
