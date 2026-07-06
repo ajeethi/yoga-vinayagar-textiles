@@ -267,6 +267,96 @@
 <div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
 <script src="../js/main.js" defer></script>
 <script src="../js/cart.js" defer></script>
+
+<!-- Firebase Details Loader -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, getDocs, limit, query } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDbSX4zg2sE3TNoo3YPeFhGFU47HLnSn14",
+  authDomain: "yoga-vinayagar.firebaseapp.com",
+  projectId: "yoga-vinayagar",
+  storageBucket: "yoga-vinayagar.firebasestorage.app",
+  messagingSenderId: "495402334123",
+  appId: "1:495402334123:web:2ece22a328c541627844ee"
+};
+
+let currentProduct = { id: "p001", name: "Kanchipuram Silk Wedding Saree", price: 3500, image: "../images/hero-wedding.png" };
+
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const params = new URLSearchParams(window.location.search);
+  let id = params.get("id");
+  
+  if (id) {
+    const docRef = doc(db, "products", id);
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      currentProduct = { id: snap.id, ...snap.data() };
+      updateProductUI(currentProduct);
+    }
+  } else {
+    // Fallback to first available
+    const snap = await getDocs(query(collection(db, "products"), limit(1)));
+    if (!snap.empty) {
+      const d = snap.docs[0];
+      currentProduct = { id: d.id, ...d.data() };
+      updateProductUI(currentProduct);
+    }
+  }
+} catch(e) { console.error("Firebase error details page:", e); }
+
+function updateProductUI(p) {
+  document.title = p.name + " | Yoga Vinayagar Textiles";
+  document.getElementById("mainImg").src = p.image;
+  document.getElementById("mainImg").alt = p.name;
+  
+  // Update thumbnails
+  const thumbs = document.querySelectorAll(".thumb img");
+  if(thumbs.length > 0) {
+    thumbs.forEach(t => t.src = p.image);
+  }
+
+  // Text details
+  document.querySelector(".product-detail__name").textContent = p.name;
+  document.querySelector(".product-detail__category").textContent = p.category || "Silk";
+  document.querySelector(".product-detail__price-current").textContent = "₹" + p.price.toLocaleString('en-IN');
+  
+  const origPriceEl = document.querySelector(".product-detail__price-original");
+  const discEl = document.querySelector(".product-detail__discount");
+  if (p.priceOriginal) {
+    if(origPriceEl) origPriceEl.textContent = "₹" + p.priceOriginal.toLocaleString('en-IN');
+    if(discEl) {
+      const diff = p.priceOriginal - p.price;
+      const pct = Math.round((diff / p.priceOriginal) * 100);
+      discEl.textContent = pct + "% off";
+    }
+  } else {
+    if(origPriceEl) origPriceEl.textContent = "";
+    if(discEl) discEl.textContent = "";
+  }
+
+  // Stock status description
+  const stockInfo = document.getElementById("stock-info");
+  if (stockInfo) {
+    if (p.stock === 'out') {
+      stockInfo.innerHTML = `<span style="color:var(--clr-error);font-weight:600;">❌ Out of Stock</span>`;
+      document.getElementById("addToCartBtn").disabled = true;
+    } else if (p.stock === 'low') {
+      stockInfo.innerHTML = `<span style="color:var(--clr-warning);font-weight:600;">⚠️ Low Stock (Only a few left!)</span>`;
+      document.getElementById("addToCartBtn").disabled = false;
+    } else {
+      stockInfo.innerHTML = `<span style="color:var(--clr-success);font-weight:600;">✓ In Stock</span>`;
+      document.getElementById("addToCartBtn").disabled = false;
+    }
+  }
+
+  // Expose product globally for cart interaction
+  window._loadedProduct = p;
+}
+</script>
+
 <script>
 let qty = 1;
 function changeQty(delta) {
@@ -297,10 +387,11 @@ function switchTab(id) {
   });
 }
 function handleAddToCart() {
+  const p = window._loadedProduct || { id: "p001", name: "Kanchipuram Silk Wedding Saree", price: 3500, image: "../images/hero-wedding.png" };
   const color = document.getElementById('selectedColor').textContent;
   const size = document.getElementById('selectedSize').textContent;
-  const name = `Kanchipuram Silk Saree (${color}, ${size})`;
-  if (typeof addToCart === 'function') addToCart('p001', name, 3500, '../images/hero-wedding.png', qty);
+  const name = `${p.name} (${color}, ${size})`;
+  if (typeof addToCart === 'function') addToCart(p.id, name, p.price, p.image, qty);
   else showToast(name + ' added to cart!', 'success');
 }
 function copyLink() {
