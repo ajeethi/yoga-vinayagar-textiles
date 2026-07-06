@@ -267,6 +267,29 @@
 
 <div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
 <script src="../js/main.js" defer></script>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDbSX4zg2sE3TNoo3YPeFhGFU47HLnSn14",
+  authDomain: "yoga-vinayagar.firebaseapp.com",
+  projectId: "yoga-vinayagar",
+  storageBucket: "yoga-vinayagar.firebasestorage.app",
+  messagingSenderId: "495402334123",
+  appId: "1:495402334123:web:2ece22a328c541627844ee"
+};
+try {
+  const app = initializeApp(firebaseConfig);
+  window._yvDB = getFirestore(app);
+  window._yvCol = collection;
+  window._yvAdd = addDoc;
+  window._yvTS  = serverTimestamp;
+  console.log("Firebase ready ✅");
+} catch(e) { console.error("Firebase:", e); }
+</script>
+
 <script>
 // Load cart summary
 const SHIP_STD = 60, SHIP_EXPRESS = 150, FREE_SHIP = 999;
@@ -366,13 +389,52 @@ function placeOrder() {
     return;
   }
 
-  // Simulate order placement
-  setTimeout(() => {
+  // Build order object
+  const cart = JSON.parse(localStorage.getItem('yv_cart') || '[]');
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty, 0);
+  const shipping = subtotal >= FREE_SHIP ? 0 : deliveryCost;
+  const codFee   = paymentMethod === 'cod' ? 20 : 0;
+  const orderData = {
+    firstName:   document.getElementById('firstName').value.trim(),
+    lastName:    document.getElementById('lastName').value.trim(),
+    phone:       document.getElementById('phone').value.trim(),
+    email:       document.getElementById('email').value.trim(),
+    address:     document.getElementById('address').value.trim(),
+    city:        document.getElementById('city').value.trim(),
+    state:       document.getElementById('state').value,
+    pincode:     document.getElementById('pincode').value.trim(),
+    notes:       document.getElementById('orderNotes').value.trim(),
+    items:       cart,
+    subtotal:    subtotal,
+    shipping:    shipping,
+    codFee:      codFee,
+    total:       subtotal + shipping + codFee,
+    payment:     paymentMethod,
+    status:      'pending',
+    source:      'website'
+  };
+
+  // Save to Firebase if available, else fallback
+  async function doSave() {
     const orderId = 'YVT-' + Date.now().toString().slice(-6);
+    if (window._yvDB && window._yvAdd && window._yvCol && window._yvTS) {
+      try {
+        const ref = await window._yvAdd(
+          window._yvCol(window._yvDB, 'orders'),
+          { ...orderData, id: orderId, createdAt: window._yvTS() }
+        );
+        console.log('Order saved to Firebase:', ref.id);
+      } catch(e) {
+        console.error('Firebase save error:', e);
+      }
+    }
     document.getElementById('orderId').textContent = orderId;
     document.getElementById('confirmModal').style.display = 'flex';
     localStorage.removeItem('yv_cart');
-  }, 1200);
+    if (typeof updateCartCount === 'function') updateCartCount();
+  }
+
+  setTimeout(doSave, 800);
 }
 
 document.addEventListener('DOMContentLoaded', loadCheckoutCart);
