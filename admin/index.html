@@ -8,13 +8,9 @@
 <!-- Firebase SDK -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot, serverTimestamp }
+  import { getFirestore, collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, onSnapshot, serverTimestamp }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // ── YOUR FIREBASE CONFIG ────────────────────────────────────
-  // Replace these values with your Firebase project credentials
-  // Get them from: https://console.firebase.google.com
-  // Project Settings → Your apps → Web app → firebaseConfig
   const firebaseConfig = {
     apiKey:            "AIzaSyDbSX4zg2sE3TNoo3YPeFhGFU47HLnSn14",
     authDomain:        "yoga-vinayagar.firebaseapp.com",
@@ -23,7 +19,6 @@
     messagingSenderId: "495402334123",
     appId:             "1:495402334123:web:2ece22a328c541627844ee"
   };
-  // ────────────────────────────────────────────────────────────
 
   let db = null;
   const IS_CONFIGURED = !firebaseConfig.apiKey.includes("REPLACE");
@@ -33,9 +28,59 @@
       const app = initializeApp(firebaseConfig);
       db = getFirestore(app);
       window.db = db;
-      window.firestoreFns = { collection, getDocs, doc, updateDoc, query, orderBy, onSnapshot, serverTimestamp };
+      window.firestoreFns = { collection, getDocs, doc, setDoc, addDoc, updateDoc, deleteDoc, query, orderBy, onSnapshot, serverTimestamp };
       window.IS_LIVE = true;
       console.log("Firebase connected ✅");
+
+      // Auto-seed default products if empty
+      (async function seedDefaults() {
+        try {
+          const snap = await getDocs(collection(db, "products"));
+          if (snap.empty) {
+            console.log("Seeding default products to database...");
+            const defaults = [
+              { name: "Banarasi Silk Zari Saree", category: "silk", price: 2200, priceOriginal: 2800, stock: "active", image: "../images/cat-silk.png" },
+              { name: "Grand Bridal Wedding Saree", category: "wedding", price: 5500, priceOriginal: 6500, stock: "active", image: "../images/cat-wedding.png" },
+              { name: "Fancy Georgette Printed Saree", category: "fancy", price: 1200, priceOriginal: 1600, stock: "active", image: "../images/hero-wedding.png" },
+              { name: "Chettinad Cotton Saree", category: "cotton", price: 650, priceOriginal: 850, stock: "active", image: "../images/hero-cotton.png" },
+              { name: "Designer Embroidered Saree", category: "designer", price: 1800, priceOriginal: 2200, stock: "active", image: "../images/cat-silk.png" },
+              { name: "Chiffon Floral Print Saree", category: "chiffon", price: 990, priceOriginal: 1250, stock: "active", image: "../images/hero-wedding.png" },
+              { name: "Heavy Stone Work Party Wear", category: "stone", price: 2800, priceOriginal: 3500, stock: "active", image: "../images/cat-wedding.png" },
+              { name: "Pure Cotton Handloom Kurti", category: "kurtis", price: 790, priceOriginal: 990, stock: "active", image: "../images/hero-cotton.png" },
+              { name: "Embroidery Design Kurti", category: "kurtis", price: 890, priceOriginal: 1200, stock: "active", image: "../images/cat-silk.png" },
+              { name: "Summer Casual Kurti / Top", category: "tops", price: 490, priceOriginal: 690, stock: "active", image: "../images/hero-cotton.png" },
+              { name: "Premium Soft Cotton Nighty", category: "nighties", price: 450, priceOriginal: 550, stock: "active", image: "../images/hero-cotton.png" },
+              { name: "Cotton Nighty - Printed", category: "nighties", price: 380, priceOriginal: 480, stock: "active", image: "../images/hero-cotton.png" }
+            ];
+            for (const item of defaults) {
+              await addDoc(collection(db, "products"), {
+                ...item,
+                createdAt: serverTimestamp()
+              });
+            }
+            console.log("Seeding default products complete!");
+          }
+
+          // Auto-seed default coupons if empty
+          const couponSnap = await getDocs(collection(db, "coupons"));
+          if (couponSnap.empty) {
+            console.log("Seeding default coupons...");
+            const defaultCoupons = [
+              { code: "FIRST10", discount: 10, type: "percent", minOrder: 500, status: "active" },
+              { code: "SAVE15", discount: 15, type: "percent", minOrder: 1000, status: "active" },
+              { code: "YVT20", discount: 20, type: "percent", minOrder: 2000, status: "active" }
+            ];
+            for (const cp of defaultCoupons) {
+              await addDoc(collection(db, "coupons"), {
+                ...cp,
+                createdAt: serverTimestamp()
+              });
+            }
+            console.log("Seeding default coupons complete!");
+          }
+        } catch(err) { console.error("Seeding error:", err); }
+      })();
+
     } catch(e) {
       console.error("Firebase error:", e);
       window.IS_LIVE = false;
@@ -141,6 +186,15 @@ a{color:inherit;text-decoration:none}
 
 @media(max-width:1024px){.stat-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){:root{--sidebar-w:0px}.sidebar{display:none}.main-content{margin-left:0}.stat-grid{grid-template-columns:1fr 1fr}}
+
+/* Modal dialog styles */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 1rem; }
+.modal-overlay.open { display: flex; }
+.modal-content { background: white; border-radius: 12px; padding: 1.75rem; width: min(500px, 100%); max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow); position: relative; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; padding-bottom: .75rem; border-bottom: 1px solid #e5e7eb; }
+.modal-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--maroon); }
+.modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #9ca3af; line-height: 1; }
+.modal-close:hover { color: #374151; }
 </style>
 </head>
 <body>
@@ -295,27 +349,17 @@ a{color:inherit;text-decoration:none}
         </div>
       </div>
 
-      <!-- PRODUCTS (static management) -->
+      <!-- PRODUCTS PAGE -->
       <div class="page" id="page-products">
-        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem;">
-          <p style="color:#166534;font-size:.8rem;">💡 <strong>Tip:</strong> To add/remove products on your website, edit the HTML files in <code>C:\yoga-vinayagar\pages\</code> and push to GitHub. Netlify will auto-update.</p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;gap:.5rem;flex-wrap:wrap;">
+          <div class="search-bar" style="margin-bottom:0;flex:1;">
+            <input type="search" placeholder="Search products by title or category..." id="prodSearchInput" oninput="filterProducts()"/>
+          </div>
+          <button class="btn-sm btn-primary" onclick="openProductModal()">➕ Add Product</button>
         </div>
         <div class="card">
-          <div class="card-header"><div class="card-title">Product Categories</div></div>
-          <div class="card-body" style="padding:0;">
-            <table class="table">
-              <thead><tr><th>Category</th><th>Page</th><th>Status</th><th>Action</th></tr></thead>
-              <tbody>
-                <tr><td>🥻 Silk Sarees</td><td>silk-sarees.html</td><td><span class="badge badge-green">Live</span></td><td><a href="https://yogavinayaga.netlify.app/pages/silk-sarees.html" target="_blank" class="btn-sm btn-outline">View</a></td></tr>
-                <tr><td>🌿 Cotton Sarees</td><td>cotton-sarees.html</td><td><span class="badge badge-green">Live</span></td><td><a href="https://yogavinayaga.netlify.app/pages/cotton-sarees.html" target="_blank" class="btn-sm btn-outline">View</a></td></tr>
-                <tr><td>💍 Wedding Collection</td><td>wedding-collection.html</td><td><span class="badge badge-green">Live</span></td><td><a href="https://yogavinayaga.netlify.app/pages/wedding-collection.html" target="_blank" class="btn-sm btn-outline">View</a></td></tr>
-                <tr><td>✨ Fancy Sarees</td><td>fancy-sarees.html</td><td><span class="badge badge-green">Live</span></td><td><a href="https://yogavinayaga.netlify.app/pages/fancy-sarees.html" target="_blank" class="btn-sm btn-outline">View</a></td></tr>
-                <tr><td>👕 Kurtis</td><td>kurtis.html</td><td><span class="badge badge-green">Live</span></td><td><a href="https://yogavinayaga.netlify.app/pages/kurtis.html" target="_blank" class="btn-sm btn-outline">View</a></td></tr>
-                <tr><td>🌙 Nighties</td><td>nighties.html</td><td><span class="badge badge-green">Live</span></td><td><a href="https://yogavinayaga.netlify.app/pages/nighties.html" target="_blank" class="btn-sm btn-outline">View</a></td></tr>
-                <tr><td>👔 Men's Wear</td><td>mens-wear.html</td><td><span class="badge badge-green">Live</span></td><td><a href="https://yogavinayaga.netlify.app/pages/mens-wear.html" target="_blank" class="btn-sm btn-outline">View</a></td></tr>
-                <tr><td>👧 Kids Collection</td><td>kids-collection.html</td><td><span class="badge badge-green">Live</span></td><td><a href="https://yogavinayaga.netlify.app/pages/kids-collection.html" target="_blank" class="btn-sm btn-outline">View</a></td></tr>
-              </tbody>
-            </table>
+          <div class="card-body" style="padding:0;" id="productsTableContainer">
+            <div class="loading">Loading products...</div>
           </div>
         </div>
       </div>
@@ -327,21 +371,124 @@ a{color:inherit;text-decoration:none}
         </div>
       </div>
 
-      <!-- COUPONS -->
+      <!-- COUPONS PAGE -->
       <div class="page" id="page-coupons">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+          <button class="btn-sm btn-primary" onclick="openCouponModal()">➕ Add Coupon Code</button>
+        </div>
         <div class="card">
-          <div class="card-header"><div class="card-title">🎟️ Active Discount Codes</div></div>
-          <div class="card-body" style="padding:0;">
-            <table class="table">
-              <thead><tr><th>Code</th><th>Discount</th><th>Min Order</th><th>Status</th></tr></thead>
-              <tbody>
-                <tr><td><strong>FIRST10</strong></td><td>10% Off</td><td>₹500</td><td><span class="badge badge-green">Active</span></td></tr>
-                <tr><td><strong>SAVE15</strong></td><td>15% Off</td><td>₹1,000</td><td><span class="badge badge-green">Active</span></td></tr>
-                <tr><td><strong>YVT20</strong></td><td>20% Off</td><td>₹2,000</td><td><span class="badge badge-green">Active</span></td></tr>
-                <tr><td><strong>WEDDING25</strong></td><td>25% Off</td><td>₹5,000</td><td><span class="badge badge-yellow">Inactive</span></td></tr>
-              </tbody>
-            </table>
+          <div class="card-body" style="padding:0;" id="couponsTableContainer">
+            <div class="loading">Loading coupons...</div>
           </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT MODAL -->
+      <div class="modal-overlay" id="productModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="prodModalTitle">Add New Product</h3>
+            <button class="modal-close" onclick="closeProductModal()">&times;</button>
+          </div>
+          <form id="productForm" onsubmit="saveProductForm(event)">
+            <input type="hidden" id="prodId"/>
+            <div style="margin-bottom:1rem;">
+              <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Product Name *</label>
+              <input type="text" id="prodName" class="input" required placeholder="e.g. Kanchipuram Silk Saree"/>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem;">
+              <div>
+                <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Category *</label>
+                <select id="prodCategory" class="input" required>
+                  <option value="silk">Silk Saree</option>
+                  <option value="cotton">Cotton Saree</option>
+                  <option value="wedding">Wedding Saree</option>
+                  <option value="fancy">Fancy Saree</option>
+                  <option value="designer">Designer Saree</option>
+                  <option value="chiffon">Chiffon Saree</option>
+                  <option value="stone">Stone Saree</option>
+                  <option value="kurtis">Kurtis</option>
+                  <option value="tops">Tops</option>
+                  <option value="nighties">Nighties</option>
+                  <option value="mens">Men's Wear</option>
+                  <option value="kids">Kids Collection</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Stock Status *</label>
+                <select id="prodStock" class="input" required>
+                  <option value="active">In Stock</option>
+                  <option value="low">Low Stock</option>
+                  <option value="out">Out of Stock</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem;">
+              <div>
+                <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Sale Price (₹) *</label>
+                <input type="number" id="prodPrice" class="input" required placeholder="2200"/>
+              </div>
+              <div>
+                <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Original Price (₹)</label>
+                <input type="number" id="prodPriceOriginal" class="input" placeholder="2800"/>
+              </div>
+            </div>
+            <div style="margin-bottom:1.5rem;">
+              <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Image URL *</label>
+              <input type="text" id="prodImage" class="input" required placeholder="../images/cat-silk.png"/>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:.5rem;">
+              <button type="button" class="btn-sm btn-outline" onclick="closeProductModal()">Cancel</button>
+              <button type="submit" class="btn-sm btn-primary">Save Product</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- COUPON MODAL -->
+      <div class="modal-overlay" id="couponModalOverlay">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="couponModalTitle">Add Coupon Code</h3>
+            <button class="modal-close" onclick="closeCouponModal()">&times;</button>
+          </div>
+          <form id="couponForm" onsubmit="saveCouponForm(event)">
+            <input type="hidden" id="couponId"/>
+            <div style="margin-bottom:1rem;">
+              <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Coupon Code *</label>
+              <input type="text" id="couponCode" class="input" required placeholder="e.g. FESTIVE20" style="text-transform:uppercase;"/>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem;">
+              <div>
+                <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Discount Value *</label>
+                <input type="number" id="couponDiscount" class="input" required placeholder="e.g. 15"/>
+              </div>
+              <div>
+                <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Type *</label>
+                <select id="couponType" class="input" required>
+                  <option value="percent">Percentage (%)</option>
+                  <option value="flat">Flat Amount (₹)</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem;">
+              <div>
+                <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Min Order Value (₹)</label>
+                <input type="number" id="couponMinOrder" class="input" value="0" placeholder="e.g. 999"/>
+              </div>
+              <div>
+                <label style="display:block;font-size:.75rem;font-weight:600;margin-bottom:.3rem;">Status</label>
+                <select id="couponStatus" class="input" required>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:.5rem;">
+              <button type="button" class="btn-sm btn-outline" onclick="closeCouponModal()">Cancel</button>
+              <button type="submit" class="btn-sm btn-primary">Save Coupon</button>
+            </div>
+          </form>
         </div>
       </div>
 
@@ -438,7 +585,7 @@ const DEMO_LEADS = [
   {id:'WS-002',createdAt:{toDate:()=>new Date(Date.now()-86400000)},name:'Meena Stores',business:'Meena Fashion',phone:'9876512345',city:'Trichy',interest:'Fancy Sarees',status:'new'},
 ];
 
-let allOrders = [], allLeads = [], allMessages = [];
+let allOrders = [], allLeads = [], allMessages = [], allProducts = [], allCoupons = [];
 
 // ── Helpers ────────────────────────────────────────────────────
 function fmt(n) { return '₹' + Number(n||0).toLocaleString('en-IN'); }
@@ -531,6 +678,20 @@ function listenLiveData() {
     allMessages = snap.docs.map(d => ({id:d.id,...d.data()}));
     renderMessages(allMessages);
     updateBadges();
+  });
+
+  // Products
+  const pq = query(collection(db,'products'), orderBy('createdAt','desc'));
+  onSnapshot(pq, snap => {
+    allProducts = snap.docs.map(d => ({id:d.id,...d.data()}));
+    renderProducts(allProducts);
+  });
+
+  // Coupons
+  const cq = query(collection(db,'coupons'), orderBy('createdAt','desc'));
+  onSnapshot(cq, snap => {
+    allCoupons = snap.docs.map(d => ({id:d.id,...d.data()}));
+    renderCoupons(allCoupons);
   });
 }
 
@@ -677,6 +838,172 @@ function renderCustomers(orders) {
       <td><a href="https://wa.me/91${c.phone}" target="_blank" class="btn-sm" style="background:#25D366;color:white;">💬 WhatsApp</a></td>
     </tr>`).join('')}</tbody>
   </table></div>`;
+}
+
+}
+
+// ── Products Management ───────────────────────────────────────
+function renderProducts(products) {
+  const el = document.getElementById('productsTableContainer');
+  if (!products || !products.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">👗</div><p>No products found. Add your first product!</p></div>';
+    return;
+  }
+  el.innerHTML = `<table class="table">
+    <thead><tr><th>Image</th><th>Name</th><th>Category</th><th>Price</th><th>Original Price</th><th>Stock Status</th><th>Actions</th></tr></thead>
+    <tbody>${products.map(p => `<tr>
+      <td><img src="${p.image||'../images/cat-silk.png'}" style="width:40px;height:52px;object-fit:cover;border-radius:4px;border:1px solid #e5e7eb;"/></td>
+      <td><strong>${p.name||'—'}</strong></td>
+      <td style="text-transform:capitalize;">${p.category||'—'}</td>
+      <td><strong>${fmt(p.price)}</strong></td>
+      <td style="text-decoration:line-through;color:#9ca3af;">${p.priceOriginal ? fmt(p.priceOriginal) : '—'}</td>
+      <td>${statusBadge(p.stock)}</td>
+      <td>
+        <div style="display:flex;gap:.375rem;">
+          <button class="btn-sm btn-outline" onclick="editProduct('${p.id}')">✏️ Edit</button>
+          <button class="btn-sm btn-danger" style="padding:.25rem .5rem;" onclick="deleteProduct('${p.id}')">🗑️</button>
+        </div>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function openProductModal() {
+  document.getElementById('productForm').reset();
+  document.getElementById('prodId').value = '';
+  document.getElementById('prodModalTitle').textContent = 'Add New Product';
+  document.getElementById('productModal').classList.add('open');
+}
+function closeProductModal() {
+  document.getElementById('productModal').classList.remove('open');
+}
+function editProduct(id) {
+  const p = allProducts.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('prodId').value = p.id;
+  document.getElementById('prodName').value = p.name || '';
+  document.getElementById('prodCategory').value = p.category || 'silk';
+  document.getElementById('prodStock').value = p.stock || 'active';
+  document.getElementById('prodPrice').value = p.price || 0;
+  document.getElementById('prodPriceOriginal').value = p.priceOriginal || '';
+  document.getElementById('prodImage').value = p.image || '';
+  document.getElementById('prodModalTitle').textContent = 'Edit Product';
+  document.getElementById('productModal').classList.add('open');
+}
+async function saveProductForm(e) {
+  e.preventDefault();
+  const id = document.getElementById('prodId').value;
+  const data = {
+    name: document.getElementById('prodName').value.trim(),
+    category: document.getElementById('prodCategory').value,
+    stock: document.getElementById('prodStock').value,
+    price: Number(document.getElementById('prodPrice').value),
+    priceOriginal: document.getElementById('prodPriceOriginal').value ? Number(document.getElementById('prodPriceOriginal').value) : null,
+    image: document.getElementById('prodImage').value.trim()
+  };
+  const { doc, setDoc, addDoc, serverTimestamp } = window.firestoreFns;
+  const db = window.db;
+  if (!window.IS_LIVE) { alert("Cannot save in demo mode. Please setup Firebase."); return; }
+  try {
+    if (id) {
+      await setDoc(doc(db, 'products', id), { ...data, updatedAt: serverTimestamp() }, { merge: true });
+    } else {
+      await addDoc(collection(db, 'products'), { ...data, createdAt: serverTimestamp() });
+    }
+    closeProductModal();
+  } catch(err) { alert("Error saving product: " + err.message); }
+}
+async function deleteProduct(id) {
+  if (!confirm("Are you sure you want to delete this product?")) return;
+  const { doc, deleteDoc } = window.firestoreFns;
+  const db = window.db;
+  if (!window.IS_LIVE) { alert("Cannot delete in demo mode."); return; }
+  try {
+    await deleteDoc(doc(db, 'products', id));
+  } catch(err) { alert("Error deleting: " + err.message); }
+}
+function filterProducts() {
+  const q = document.getElementById('prodSearchInput').value.toLowerCase().trim();
+  if (!q) { renderProducts(allProducts); return; }
+  const filtered = allProducts.filter(p => (p.name||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q));
+  renderProducts(filtered);
+}
+
+// ── Coupons Management ────────────────────────────────────────
+function renderCoupons(coupons) {
+  const el = document.getElementById('couponsTableContainer');
+  if (!coupons || !coupons.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon">🎟️</div><p>No coupons found. Add your first coupon!</p></div>';
+    return;
+  }
+  el.innerHTML = `<table class="table">
+    <thead><tr><th>Code</th><th>Discount</th><th>Min Order</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>${coupons.map(c => `<tr>
+      <td><strong style="text-transform:uppercase;font-size:.85rem;color:var(--maroon);">${c.code||'—'}</strong></td>
+      <td><strong>${c.type==='flat' ? '₹'+c.discount : c.discount+'% Off'}</strong></td>
+      <td>${c.minOrder ? fmt(c.minOrder) : 'No Minimum'}</td>
+      <td>${statusBadge(c.status)}</td>
+      <td>
+        <div style="display:flex;gap:.375rem;">
+          <button class="btn-sm btn-outline" onclick="editCoupon('${c.id}')">✏️ Edit</button>
+          <button class="btn-sm btn-danger" style="padding:.25rem .5rem;" onclick="deleteCoupon('${c.id}')">🗑️</button>
+        </div>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function openCouponModal() {
+  document.getElementById('couponForm').reset();
+  document.getElementById('couponId').value = '';
+  document.getElementById('couponModalTitle').textContent = 'Add Coupon Code';
+  document.getElementById('couponModalOverlay').classList.add('open');
+}
+function closeCouponModal() {
+  document.getElementById('couponModalOverlay').classList.remove('open');
+}
+function editCoupon(id) {
+  const c = allCoupons.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('couponId').value = c.id;
+  document.getElementById('couponCode').value = c.code || '';
+  document.getElementById('couponDiscount').value = c.discount || 0;
+  document.getElementById('couponType').value = c.type || 'percent';
+  document.getElementById('couponMinOrder').value = c.minOrder || 0;
+  document.getElementById('couponStatus').value = c.status || 'active';
+  document.getElementById('couponModalTitle').textContent = 'Edit Coupon Code';
+  document.getElementById('couponModalOverlay').classList.add('open');
+}
+async function saveCouponForm(e) {
+  e.preventDefault();
+  const id = document.getElementById('couponId').value;
+  const data = {
+    code: document.getElementById('couponCode').value.trim().toUpperCase(),
+    discount: Number(document.getElementById('couponDiscount').value),
+    type: document.getElementById('couponType').value,
+    minOrder: Number(document.getElementById('couponMinOrder').value || 0),
+    status: document.getElementById('couponStatus').value
+  };
+  const { doc, setDoc, addDoc, serverTimestamp } = window.firestoreFns;
+  const db = window.db;
+  if (!window.IS_LIVE) { alert("Cannot save in demo mode."); return; }
+  try {
+    if (id) {
+      await setDoc(doc(db, 'coupons', id), { ...data, updatedAt: serverTimestamp() }, { merge: true });
+    } else {
+      await addDoc(collection(db, 'coupons'), { ...data, createdAt: serverTimestamp() });
+    }
+    closeCouponModal();
+  } catch(err) { alert("Error saving coupon: " + err.message); }
+}
+async function deleteCoupon(id) {
+  if (!confirm("Are you sure you want to delete this coupon?")) return;
+  const { doc, deleteDoc } = window.firestoreFns;
+  const db = window.db;
+  if (!window.IS_LIVE) { alert("Cannot delete in demo mode."); return; }
+  try {
+    await deleteDoc(doc(db, 'coupons', id));
+  } catch(err) { alert("Error deleting: " + err.message); }
 }
 
 // ── Firebase config save ───────────────────────────────────────
