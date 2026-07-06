@@ -344,6 +344,57 @@
 
 <script src="../js/main.js" defer></script>
 <script src="../js/cart.js" defer></script>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDbSX4zg2sE3TNoo3YPeFhGFU47HLnSn14",
+  authDomain: "yoga-vinayagar.firebaseapp.com",
+  projectId: "yoga-vinayagar",
+  storageBucket: "yoga-vinayagar.firebasestorage.app",
+  messagingSenderId: "495402334123",
+  appId: "1:495402334123:web:2ece22a328c541627844ee"
+};
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+  const snap = await getDocs(q);
+  if (!snap.empty) {
+    const list = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderLiveProducts(list);
+  }
+} catch(e) { console.error("Firebase load error:", e); }
+
+function renderLiveProducts(list) {
+  const grid = document.getElementById("productGrid");
+  if (!grid) return;
+  grid.innerHTML = list.map((p, idx) => `
+    <article class="product-card" data-category="${p.category||'silk'}" data-price="${p.price||0}">
+      <div class="product-card__image-wrap">
+        ${p.stock === 'out' ? '<span class="product-badge out">Out of Stock</span>' : (p.priceOriginal ? `<span class="product-badge sale">Sale</span>` : '')}
+        <img src="${p.image||'../images/cat-silk.png'}" alt="${p.name}" class="product-card__img" loading="lazy"/>
+        <div class="product-card__actions">
+          <button class="product-card__wishlist" data-product-id="${p.id}" aria-label="Add to wishlist" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+          <button class="product-card__quick-view" onclick="quickAddToCart('${p.id}','${p.name.replace(/'/g, "\\'")}',${p.price},'${p.image||''}')" aria-label="Add to cart" ${p.stock==='out'?'disabled':''}>Add to Cart</button>
+        </div>
+      </div>
+      <div class="product-card__body">
+        <div class="product-card__category" style="text-transform:capitalize;">${p.category||'Silk'}</div>
+        <h3 class="product-card__name"><a href="product-detail.html?id=${p.id}">${p.name}</a></h3>
+        <div class="product-card__price">
+          <span class="product-card__price-current">₹${p.price.toLocaleString('en-IN')}</span>
+          ${p.priceOriginal ? `<span class="product-card__price-original">₹${p.priceOriginal.toLocaleString('en-IN')}</span>` : ''}
+        </div>
+      </div>
+    </article>
+  `).join('');
+  document.getElementById('productCount').textContent = list.length;
+}
+</script>
+
 <script>
 function filterProducts(cat, btn) {
   document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
