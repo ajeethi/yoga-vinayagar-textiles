@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Your Cart | Yoga Vinayagar Textiles</title>
+<meta name="description" content="View your shopping cart at Yoga Vinayagar Textiles. Review your saree selection, apply coupon codes, and proceed to checkout. Free delivery above ₹999."/>
+<link rel="canonical" href="https://yogavinayagartextiles.com/pages/cart.html"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Playfair+Display:wght@400;700&family=Inter:wght@400;500;600&family=Cinzel:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../css/design-system.css"/>
+<link rel="stylesheet" href="../css/components.css"/>
+</head>
+<body>
+<div class="announcement-bar"><div class="announcement-bar__track"><span class="announcement-bar__item"><span class="announcement-bar__dot"></span>Free Delivery Above ₹999 — Pan India</span><span class="announcement-bar__item"><span class="announcement-bar__dot"></span>Secure Payment: UPI · Cards · COD Available</span><span class="announcement-bar__item"><span class="announcement-bar__dot"></span>Free Delivery Above ₹999 — Pan India</span></div></div>
+<header><nav class="navbar" id="navbar"><div class="container"><div class="navbar__inner"><a href="../index.html" class="navbar__logo"><span class="navbar__logo-primary">Yoga Vinayagar</span><span class="navbar__logo-secondary">Cotton Sarees World · Madurai</span></a><div style="flex:1;"></div><div class="navbar__actions"><a href="collections.html" class="btn btn-outline-maroon btn-sm">← Continue Shopping</a><a href="tel:+918939605447" class="navbar__cta">📞 Call Us</a></div></div></div></nav></header>
+
+<main class="section-pad">
+<div class="container">
+  <nav aria-label="Breadcrumb" style="margin-bottom:1.5rem;"><ol style="display:flex;gap:.5rem;font-size:var(--fs-xs);color:var(--clr-charcoal-400);"><li><a href="../index.html" style="color:var(--clr-charcoal-500);">Home</a></li><li>/</li><li style="color:var(--clr-maroon-800);">Your Cart</li></ol></nav>
+  <h1 style="font-family:var(--font-display);font-size:clamp(1.75rem,4vw,2.5rem);color:var(--clr-maroon-800);margin-bottom:2rem;">Your Shopping Cart</h1>
+
+  <div id="cartPageContent">
+    <!-- Empty State -->
+    <div id="emptyCart" style="display:none;text-align:center;padding:4rem 1rem;">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="var(--clr-charcoal-200)" stroke-width=".8" style="margin-inline:auto;margin-bottom:1.5rem;" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <h2 style="font-family:var(--font-display);font-size:var(--fs-2xl);color:var(--clr-charcoal-700);margin-bottom:.75rem;">Your cart is empty</h2>
+      <p style="color:var(--clr-charcoal-500);margin-bottom:2rem;">Looks like you haven't added any sarees yet. Explore our beautiful collection!</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a href="collections.html" class="btn btn-maroon btn-lg">Browse Collections →</a>
+        <a href="new-arrivals.html" class="btn btn-outline-maroon btn-lg">New Arrivals</a>
+      </div>
+    </div>
+
+    <!-- Cart With Items -->
+    <div id="fullCart" style="display:none;display:grid;grid-template-columns:1fr 380px;gap:2rem;align-items:flex-start;">
+
+      <!-- Cart Items -->
+      <div>
+        <div style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);overflow:hidden;">
+          <div style="padding:1rem 1.5rem;background:var(--clr-ivory-100);border-bottom:1px solid var(--clr-ivory-300);display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:var(--font-heading);font-weight:600;color:var(--clr-charcoal-700);">Cart Items (<span id="cartTotalItems">0</span>)</span>
+            <button onclick="clearAllCart()" style="font-size:var(--fs-xs);color:var(--clr-error);background:none;border:none;cursor:pointer;text-decoration:underline;">Clear All</button>
+          </div>
+          <div id="cartItemsList" style="padding:0 1.5rem;"></div>
+        </div>
+
+        <!-- Coupon -->
+        <div style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.5rem;margin-top:1rem;">
+          <h3 style="font-family:var(--font-heading);font-size:var(--fs-base);font-weight:600;color:var(--clr-charcoal-700);margin-bottom:1rem;">Apply Coupon Code</h3>
+          <div style="display:flex;gap:.75rem;">
+            <input type="text" id="couponInput" class="input" style="flex:1;" placeholder="Enter coupon code" aria-label="Coupon code"/>
+            <button onclick="applyCoupon()" class="btn btn-maroon" style="flex-shrink:0;">Apply</button>
+          </div>
+          <p style="font-size:var(--fs-xs);color:var(--clr-charcoal-400);margin-top:.5rem;">Try: <strong>FIRST10</strong> for 10% off your first order</p>
+        </div>
+
+        <!-- Payment Methods -->
+        <div style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.5rem;margin-top:1rem;">
+          <p style="font-size:var(--fs-sm);font-weight:500;color:var(--clr-charcoal-600);margin-bottom:.75rem;">We Accept</p>
+          <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+            <div style="background:var(--clr-ivory-100);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-md);padding:.5rem 1rem;font-size:var(--fs-sm);font-weight:600;color:var(--clr-charcoal-700);">UPI</div>
+            <div style="background:var(--clr-ivory-100);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-md);padding:.5rem 1rem;font-size:var(--fs-sm);font-weight:600;color:var(--clr-charcoal-700);">Cards</div>
+            <div style="background:var(--clr-ivory-100);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-md);padding:.5rem 1rem;font-size:var(--fs-sm);font-weight:600;color:var(--clr-charcoal-700);">Net Banking</div>
+            <div style="background:var(--clr-ivory-100);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-md);padding:.5rem 1rem;font-size:var(--fs-sm);font-weight:600;color:var(--clr-charcoal-700);">EMI</div>
+            <div style="background:var(--clr-ivory-100);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-md);padding:.5rem 1rem;font-size:var(--fs-sm);font-weight:600;color:var(--clr-charcoal-700);">COD</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div style="position:sticky;top:90px;">
+        <div style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.5rem;margin-bottom:1rem;">
+          <h3 style="font-family:var(--font-heading);font-size:var(--fs-xl);font-weight:700;color:var(--clr-maroon-800);margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--clr-ivory-300);">Order Summary</h3>
+          <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem;">
+            <div style="display:flex;justify-content:space-between;font-size:var(--fs-sm);color:var(--clr-charcoal-600);"><span>Subtotal</span><span id="summarySubtotal">₹0</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--fs-sm);color:var(--clr-charcoal-600);"><span>Shipping</span><span id="summaryShipping">₹60</span></div>
+            <div id="discountRow" style="display:none;flex-direction:row;justify-content:space-between;font-size:var(--fs-sm);color:var(--clr-success);"><span>Coupon Discount</span><span id="summaryDiscount">-₹0</span></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--clr-ivory-300);margin-bottom:1.5rem;">
+            <span style="font-family:var(--font-heading);font-size:var(--fs-lg);font-weight:700;">Total</span>
+            <span style="font-family:var(--font-display);font-size:var(--fs-2xl);font-weight:700;color:var(--clr-maroon-800);" id="summaryTotal">₹0</span>
+          </div>
+          <a href="checkout.html" class="btn btn-gold" style="width:100%;justify-content:center;margin-bottom:.75rem;">Proceed to Checkout →</a>
+          <a href="https://wa.me/918939605447?text=Hi%2C+I+want+to+place+an+order" class="btn" style="width:100%;justify-content:center;background:#25D366;color:#fff;" target="_blank" rel="noopener">💬 Order via WhatsApp</a>
+        </div>
+
+        <!-- Trust badges -->
+        <div style="background:var(--clr-white);border:1px solid var(--clr-ivory-300);border-radius:var(--radius-xl);padding:1.25rem;">
+          <div style="display:flex;flex-direction:column;gap:.625rem;">
+            <div style="display:flex;align-items:center;gap:.625rem;font-size:var(--fs-xs);color:var(--clr-charcoal-600);"><span aria-hidden="true">🔒</span> SSL Secured Checkout</div>
+            <div style="display:flex;align-items:center;gap:.625rem;font-size:var(--fs-xs);color:var(--clr-charcoal-600);"><span aria-hidden="true">🔄</span> 7-Day Easy Returns</div>
+            <div style="display:flex;align-items:center;gap:.625rem;font-size:var(--fs-xs);color:var(--clr-charcoal-600);"><span aria-hidden="true">🚚</span> Free Shipping Above ₹999</div>
+            <div style="display:flex;align-items:center;gap:.625rem;font-size:var(--fs-xs);color:var(--clr-charcoal-600);"><span aria-hidden="true">✨</span> Authentic Quality Guaranteed</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Recommended -->
+  <section style="margin-top:3rem;" aria-label="Recommended products">
+    <h2 style="font-family:var(--font-display);font-size:var(--fs-2xl);color:var(--clr-maroon-800);margin-bottom:1.5rem;">You May Also Like</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.25rem;">
+      <article class="product-card"><div class="product-card__image-wrap"><img src="../images/hero-wedding.png" alt="Kanchipuram Silk Saree" class="product-card__img" loading="lazy"/><div class="product-card__actions"><button class="product-card__wishlist" data-product-id="p001" aria-label="Add to wishlist" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="product-card__quick-view" onclick="addToCart('p001','Kanchipuram Silk Wedding Saree',3500,'../images/hero-wedding.png')">Add to Cart</button></div></div><div class="product-card__body"><div class="product-card__category">Silk · Wedding</div><h3 class="product-card__name"><a href="product-detail.html">Kanchipuram Silk Saree</a></h3><div class="product-card__price"><span class="product-card__price-current">₹3,500</span></div></div></article>
+      <article class="product-card"><div class="product-card__image-wrap"><img src="../images/hero-cotton.png" alt="Cotton Handloom Saree" class="product-card__img" loading="lazy"/><div class="product-card__actions"><button class="product-card__wishlist" data-product-id="p002" aria-label="Add to wishlist" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="product-card__quick-view" onclick="addToCart('p002','Pure Handloom Cotton Saree',850,'../images/hero-cotton.png')">Add to Cart</button></div></div><div class="product-card__body"><div class="product-card__category">Cotton · Handloom</div><h3 class="product-card__name"><a href="product-detail.html">Pure Handloom Cotton Saree</a></h3><div class="product-card__price"><span class="product-card__price-current">₹850</span></div></div></article>
+      <article class="product-card"><div class="product-card__image-wrap"><img src="../images/cat-silk.png" alt="Banarasi Silk Saree" class="product-card__img" loading="lazy"/><div class="product-card__actions"><button class="product-card__wishlist" data-product-id="p003" aria-label="Add to wishlist" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="product-card__quick-view" onclick="addToCart('p003','Banarasi Silk Saree',2200,'../images/cat-silk.png')">Add to Cart</button></div></div><div class="product-card__body"><div class="product-card__category">Silk · Festive</div><h3 class="product-card__name"><a href="product-detail.html">Banarasi Silk Zari Saree</a></h3><div class="product-card__price"><span class="product-card__price-current">₹2,200</span></div></div></article>
+      <article class="product-card"><div class="product-card__image-wrap"><img src="../images/cat-wedding.png" alt="Grand Bridal Saree" class="product-card__img" loading="lazy"/><div class="product-card__actions"><button class="product-card__wishlist" data-product-id="p004" aria-label="Add to wishlist" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><button class="product-card__quick-view" onclick="addToCart('p004','Grand Bridal Wedding Saree',5500,'../images/cat-wedding.png')">Add to Cart</button></div></div><div class="product-card__body"><div class="product-card__category">Bridal · Premium</div><h3 class="product-card__name"><a href="product-detail.html">Grand Bridal Wedding Saree</a></h3><div class="product-card__price"><span class="product-card__price-current">₹5,500</span></div></div></article>
+    </div>
+  </section>
+</div>
+</main>
+
+<!-- Cart Drawer for recommendations -->
+<div style="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;opacity:0;pointer-events:none;transition:opacity var(--transition-base);" id="cartOverlay"></div>
+<aside style="position:fixed;right:0;top:0;bottom:0;width:min(400px,100vw);background:var(--clr-white);z-index:1000;transform:translateX(100%);transition:transform var(--transition-base);display:flex;flex-direction:column;box-shadow:var(--shadow-2xl);" id="cartDrawer" role="dialog" aria-modal="true" aria-label="Shopping cart"><div style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--clr-ivory-300);"><div style="font-family:var(--font-heading);font-size:var(--fs-xl);font-weight:700;color:var(--clr-maroon-800);">Your Cart <span id="cartItemCount"></span></div><button id="closeCart" style="background:none;border:none;cursor:pointer;color:var(--clr-charcoal-500);" aria-label="Close cart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div><div id="cartBody" style="flex:1;overflow-y:auto;padding:1rem 1.5rem;"></div><div id="cartFooter" style="padding:1rem 1.5rem;border-top:1px solid var(--clr-ivory-300);"></div></aside>
+
+<footer style="background:var(--clr-maroon-950);padding:2rem 0;"><div class="container" style="text-align:center;"><div style="font-family:var(--font-display);font-size:1.25rem;color:var(--clr-ivory-100);margin-bottom:.25rem;">Yoga Vinayagar Textiles</div><div style="font-size:var(--fs-xs);color:rgba(253,248,240,.5);">Shop No.2-19, New SMR Complex, Muthupatti Main Road, Madurai · © 2025</div></div></footer>
+<a href="https://wa.me/918939605447" class="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a>
+<a href="tel:+918939605447" class="call-fab" aria-label="Call us"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg></button>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+<script src="../js/main.js" defer></script>
+<script src="../js/cart.js" defer></script>
+<script>
+const SHIP_COST = 60, FREE_SHIP = 999;
+let discountAmount = 0;
+const COUPONS = { 'FIRST10': 10, 'SAVE15': 15, 'YVT20': 20 };
+
+function fmt(n) { return new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',minimumFractionDigits:0}).format(n); }
+
+function renderCartPage() {
+  try {
+    const cart = JSON.parse(localStorage.getItem('yv_cart') || '[]');
+    const empty = document.getElementById('emptyCart');
+    const full = document.getElementById('fullCart');
+    const list = document.getElementById('cartItemsList');
+    if (!cart.length) { empty.style.display='block'; full.style.display='none'; return; }
+    empty.style.display='none'; full.style.display='grid';
+    const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+    const count = cart.reduce((s,i)=>s+i.qty,0);
+    document.getElementById('cartTotalItems').textContent=count;
+    list.innerHTML = cart.map(item=>`
+      <div style="display:flex;gap:1rem;padding:1.25rem 0;border-bottom:1px solid var(--clr-ivory-300);align-items:flex-start;">
+        <img src="${item.image||'../images/hero-wedding.png'}" alt="${item.name}" style="width:80px;height:100px;object-fit:cover;border-radius:var(--radius-md);flex-shrink:0;"/>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:var(--font-heading);font-weight:500;color:var(--clr-charcoal-800);margin-bottom:.25rem;">${item.name}</div>
+          <div style="font-family:var(--font-heading);font-weight:700;color:var(--clr-maroon-800);margin-bottom:.75rem;">${fmt(item.price)}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;border:1px solid var(--clr-charcoal-200);border-radius:var(--radius-md);overflow:hidden;">
+              <button onclick="pageUpdateQty('${item.id}',-1)" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:1.1rem;" aria-label="Decrease">−</button>
+              <span style="width:36px;text-align:center;font-weight:500;border-inline:1px solid var(--clr-charcoal-200);">${item.qty}</span>
+              <button onclick="pageUpdateQty('${item.id}',1)" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-size:1.1rem;" aria-label="Increase">+</button>
+            </div>
+            <div style="font-weight:600;color:var(--clr-charcoal-700);">${fmt(item.price*item.qty)}</div>
+          </div>
+        </div>
+        <button onclick="pageRemove('${item.id}')" style="background:none;border:none;cursor:pointer;color:var(--clr-charcoal-300);padding:.25rem;" aria-label="Remove ${item.name}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+    `).join('');
+    updateSummary(subtotal);
+  } catch(e) { console.warn(e); }
+}
+
+function updateSummary(subtotal) {
+  const shipping = subtotal >= FREE_SHIP ? 0 : SHIP_COST;
+  const total = subtotal + shipping - discountAmount;
+  document.getElementById('summarySubtotal').textContent = fmt(subtotal);
+  document.getElementById('summaryShipping').textContent = shipping===0 ? 'FREE' : fmt(shipping);
+  document.getElementById('summaryTotal').textContent = fmt(total);
+}
+
+function pageUpdateQty(id, delta) {
+  const cart = JSON.parse(localStorage.getItem('yv_cart') || '[]');
+  const idx = cart.findIndex(i=>i.id===id);
+  if (idx===-1) return;
+  cart[idx].qty += delta;
+  if (cart[idx].qty <= 0) cart.splice(idx,1);
+  localStorage.setItem('yv_cart', JSON.stringify(cart));
+  renderCartPage();
+}
+
+function pageRemove(id) {
+  let cart = JSON.parse(localStorage.getItem('yv_cart') || '[]');
+  cart = cart.filter(i=>i.id!==id);
+  localStorage.setItem('yv_cart', JSON.stringify(cart));
+  renderCartPage();
+  if (typeof showToast==='function') showToast('Item removed from cart','info');
+}
+
+function clearAllCart() {
+  if (!confirm('Remove all items from cart?')) return;
+  localStorage.removeItem('yv_cart');
+  renderCartPage();
+}
+
+function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  if (!code) return;
+  const cart = JSON.parse(localStorage.getItem('yv_cart') || '[]');
+  const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  if (COUPONS[code]) {
+    discountAmount = Math.round(subtotal * COUPONS[code] / 100);
+    document.getElementById('discountRow').style.display='flex';
+    document.getElementById('summaryDiscount').textContent='-'+fmt(discountAmount);
+    updateSummary(subtotal);
+    if (typeof showToast==='function') showToast('🎉 Coupon applied! '+COUPONS[code]+'% discount added.','success');
+  } else {
+    if (typeof showToast==='function') showToast('Invalid coupon code. Try FIRST10 for 10% off.','error');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', renderCartPage);
+</script>
+</body>
+</html>
