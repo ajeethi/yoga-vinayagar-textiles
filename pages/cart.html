@@ -196,19 +196,61 @@ function clearAllCart() {
   renderCartPage();
 }
 
+<!-- Firebase Coupons Validator -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyDbSX4zg2sE3TNoo3YPeFhGFU47HLnSn14",
+  authDomain: "yoga-vinayagar.firebaseapp.com",
+  projectId: "yoga-vinayagar",
+  storageBucket: "yoga-vinayagar.firebasestorage.app",
+  messagingSenderId: "495402334123",
+  appId: "1:495402334123:web:2ece22a328c541627844ee"
+};
+try {
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const snap = await getDocs(collection(db, "coupons"));
+  window._dbCoupons = snap.docs.map(d => d.data());
+  console.log("Firebase coupons loaded ✅");
+} catch(e) { console.error("Firebase coupons error:", e); }
+</script>
+
+<script>
 function applyCoupon() {
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   if (!code) return;
   const cart = JSON.parse(localStorage.getItem('yv_cart') || '[]');
   const subtotal = cart.reduce((s,i)=>s+i.price*i.qty,0);
-  if (COUPONS[code]) {
-    discountAmount = Math.round(subtotal * COUPONS[code] / 100);
+  
+  // Validate against Firebase loaded coupons or fallback to static if not ready
+  const couponsList = window._dbCoupons || [
+    { code: 'FIRST10', discount: 10, type: 'percent', minOrder: 500, status: 'active' },
+    { code: 'SAVE15', discount: 15, type: 'percent', minOrder: 1000, status: 'active' },
+    { code: 'YVT20', discount: 20, type: 'percent', minOrder: 2000, status: 'active' }
+  ];
+  
+  const coupon = couponsList.find(c => c.code === code && c.status === 'active');
+  
+  if (coupon) {
+    if (subtotal < (coupon.minOrder || 0)) {
+      if (typeof showToast === 'function') showToast(`Minimum order of ₹${coupon.minOrder} required for this coupon!`, 'error');
+      return;
+    }
+    
+    if (coupon.type === 'flat') {
+      discountAmount = coupon.discount;
+    } else {
+      discountAmount = Math.round(subtotal * coupon.discount / 100);
+    }
+    
     document.getElementById('discountRow').style.display='flex';
     document.getElementById('summaryDiscount').textContent='-'+fmt(discountAmount);
     updateSummary(subtotal);
-    if (typeof showToast==='function') showToast('🎉 Coupon applied! '+COUPONS[code]+'% discount added.','success');
+    if (typeof showToast==='function') showToast('🎉 Coupon applied successfully!','success');
   } else {
-    if (typeof showToast==='function') showToast('Invalid coupon code. Try FIRST10 for 10% off.','error');
+    if (typeof showToast==='function') showToast('Invalid or expired coupon code.','error');
   }
 }
 
